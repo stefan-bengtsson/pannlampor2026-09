@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base target="_blank">
+  <title>Orienteringspannlampor – Jämförelse</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #273549;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --primary-subtle: rgba(56, 189, 248, 0.12);
+      --accent: #f59e0b;
+      --success: #10b981;
+      --success-subtle: rgba(16, 185, 129, 0.12);
+      --badge-bg: #334155;
+      --table-stripe: rgba(255, 255, 255, 0.02);
+      --table-hover: rgba(56, 189, 248, 0.06);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --radius: 10px;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-subtle: rgba(2, 132, 199, 0.08);
+      --accent: #d97706;
+      --success: #059669;
+      --success-subtle: rgba(5, 150, 105, 0.08);
+      --badge-bg: #e2e8f0;
+      --table-stripe: rgba(0, 0, 0, 0.015);
+      --table-hover: rgba(2, 132, 199, 0.04);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+      padding: 16px 12px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container {
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 12px;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1 span.icon {
+      font-size: 1.35rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+    }
+
+    /* Table Container */
+    .table-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.82rem;
+    }
+
+    thead {
+      background: rgba(0, 0, 0, 0.25);
+      border-bottom: 2px solid var(--border);
+    }
+
+    [data-theme="light"] thead {
+      background: #f1f5f9;
+    }
+
+    th {
+      padding: 9px 8px;
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      user-select: none;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.15s;
+    }
+
+    th:hover {
+      background: var(--table-hover);
+    }
+
+    th.no-sort {
+      cursor: default;
+    }
+
+    th.no-sort:hover {
+      background: transparent;
+    }
+
+    th .sort-icon {
+      display: inline-block;
+      margin-left: 3px;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+    }
+
+    th.sorted-asc .sort-icon::after {
+      content: "▲";
+      color: var(--primary);
+    }
+
+    th.sorted-desc .sort-icon::after {
+      content: "▼";
+      color: var(--primary);
+    }
+
+    th:not(.sorted-asc):not(.sorted-desc) .sort-icon::after {
+      content: "⇅";
+      opacity: 0.35;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.15s ease;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: var(--table-stripe);
+    }
+
+    tbody tr:hover {
+      background-color: var(--table-hover);
+    }
+
+    tbody tr.highlight-orientering {
+      background-color: rgba(56, 189, 248, 0.025);
+    }
+
+    td {
+      padding: 7px 8px;
+      vertical-align: middle;
+    }
+
+    /* Column Widths & Alignments */
+    .col-image {
+      width: 52px;
+      min-width: 52px;
+      max-width: 52px;
+      text-align: center;
+      padding: 5px 4px !important;
+    }
+
+    .product-thumb {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      padding: 2px;
+      display: block;
+      margin: 0 auto;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .product-thumb:hover {
+      transform: scale(2.2);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.65);
+      z-index: 50;
+      position: relative;
+    }
+
+    .col-model {
+      min-width: 160px;
+      max-width: 200px;
+    }
+
+    .product-name {
+      font-weight: 700;
+      font-size: 0.865rem;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      line-height: 1.25;
+    }
+
+    .badge-ol {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: var(--success-subtle);
+      color: var(--success);
+      width: fit-content;
+    }
+
+    .badge-sub3000 {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: var(--badge-bg);
+      color: var(--text-muted);
+      width: fit-content;
+    }
+
+    /* Stores List */
+    .col-stores {
+      min-width: 220px;
+      max-width: 270px;
+      font-size: 0.775rem;
+    }
+
+    .store-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .store-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.3;
+    }
+
+    .store-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 135px;
+    }
+
+    .store-link:hover {
+      text-decoration: underline;
+      color: var(--primary-hover);
+    }
+
+    .store-link svg {
+      width: 10px;
+      height: 10px;
+      flex-shrink: 0;
+      opacity: 0.75;
+    }
+
+    .store-price {
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      font-size: 0.76rem;
+    }
+
+    .store-price.is-lowest {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .store-note {
+      font-size: 0.675rem;
+      color: var(--text-muted);
+      font-weight: normal;
+    }
+
+    /* Numeric metric columns - very compact */
+    .col-num {
+      text-align: right !important;
+      white-space: nowrap;
+      width: 1%;
+      padding: 7px 7px !important;
+    }
+
+    .col-year {
+      text-align: center !important;
+      white-space: nowrap;
+    }
+
+    .metric-value {
+      font-weight: 700;
+      font-size: 0.855rem;
+      white-space: nowrap;
+    }
+
+    .price-highlight {
+      color: var(--primary);
+      font-size: 0.9rem;
+    }
+
+    .metric-sub {
+      font-size: 0.675rem;
+      color: var(--text-muted);
+      display: block;
+      white-space: nowrap;
+      margin-top: 1px;
+    }
+
+    /* Comments cell */
+    .comments-cell {
+      min-width: 220px;
+      font-size: 0.785rem;
+      color: var(--text);
+    }
+
+    .comments-cell ul {
+      list-style-type: none;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .comments-cell li {
+      position: relative;
+      padding-left: 11px;
+      line-height: 1.3;
+    }
+
+    .comments-cell li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      padding: 12px 0 8px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 0;
+      }
+      .header-actions, .product-thumb:hover {
+        display: none !important;
+      }
+      .table-wrapper {
+        border: none;
+        box-shadow: none;
+      }
+      table {
+        font-size: 7pt;
+      }
+      th, td {
+        padding: 3px 5px;
+        border: 1px solid #ccc;
+      }
+      .product-thumb {
+        width: 28px;
+        height: 28px;
+      }
+      .store-link {
+        color: #000;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <h1>
+          <span class="icon">🔦</span> Orienteringspannlampor – Jämförelse
+        </h1>
+        <div class="header-actions">
+          <button id="themeToggle" class="btn" title="Växla ljust/mörkt läge">
+            <span id="themeIcon">☀️</span> Ljust läge
+          </button>
+          <button id="printBtn" class="btn" title="Skriv ut / spara som PDF">
+            🖨️ Skriv ut
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table id="headlampsTable">
+        <thead>
+          <tr>
+            <th class="no-sort col-image">Bild</th>
+            <th data-sort="model" class="col-model">Modell <span class="sort-icon"></span></th>
+            <th data-sort="year" class="col-num col-year">Lanseringsår <span class="sort-icon"></span></th>
+            <th class="no-sort col-stores">Svenska Butiker &amp; Pris</th>
+            <th data-sort="price" class="col-num">Lägsta Pris <span class="sort-icon"></span></th>
+            <th data-sort="lumen" class="col-num">Lumen <span class="sort-icon"></span></th>
+            <th data-sort="runtime" class="col-num">Drifttid <span class="sort-icon"></span></th>
+            <th data-sort="capacity" class="col-num">Kapacitet <span class="sort-icon"></span></th>
+            <th data-sort="weight" class="col-num">Batterivikt <span class="sort-icon"></span></th>
+            <th data-sort="headweight" class="col-num">Huvudvikt <span class="sort-icon"></span></th>
+            <th class="no-sort comments-cell">Kommentar &amp; Egenskaper</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr data-lumen="7000" data-price="7799" data-runtime="110" data-capacity="141" data-weight="745" data-headweight="227" data-year="2023" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.bearplayshop.se/optik-ljus-avstand/belysning/ledx-lights-cobra-x-pand-g4-kit-141-wh.html" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.lampspecialisten.se/6201-large_default/ledx-cobra-x-pand-g4-kit.jpg" alt="LEDX Cobra X-pand G4 Kit" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">LEDX Cobra X-pand G4 Kit</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2023</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.bearplayshop.se/optik-ljus-avstand/belysning/ledx-lights-cobra-x-pand-g4-kit-141-wh.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Bearplay Shop">Bearplay Shop<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">7 799 kr <span class="store-note">(Lägsta pris)</span></span></div>
+                <div class="store-row"><a href="https://www.lampspecialisten.se/marknadens-baesta-lampor/1199ledx-cobra-x-pand-g4-kit.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Lampspecialisten">Lampspecialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">7 800 kr <span class="store-note">(8 200 kr m sele)</span></span></div>
+                <div class="store-row"><a href="https://ledx.se" target="_blank" rel="noopener noreferrer" class="store-link" title="LEDX.se">LEDX.se<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">8 485 kr <span class="store-note">(Listpris)</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">7 799 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">7 000 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">1 h 50 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">141 Wh</div>
+              <span class="metric-sub">14,4V · 9,8Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">745 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">227 g</div>
+              <span class="metric-sub">lampa 160 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Batteri: 141 Wh bärs i medföljande PowerPouch eller orienteringssele.</li>
+                <li>Ljus: 7 000 lm kontinuerligt (boost 7 500 lm) med klassledande bred X-pand-spridning.</li>
+                <li>Huvudvikt: 227 g på huvudet (160 g lamphus + 67 g Headgear Pro LX).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="6838" data-price="5899" data-runtime="120" data-capacity="99" data-weight="480" data-headweight="234" data-year="2023" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.valostore.se/sv/produkt/lumonite_leader" target="_blank" rel="noopener noreferrer">
+                <img src="https://cdn.handshake.fi/i/products/Headlamp_LUMONITE_Leader_6838_lm/thumbs/leader_normal.jpg" alt="Lumonite Leader (2023/2024)" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">Lumonite Leader (2023/2024)</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2023</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.valostore.se/sv/produkt/lumonite_leader" target="_blank" rel="noopener noreferrer" class="store-link" title="Valostore">Valostore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">5 899 kr <span class="store-note">(6 199 kr m sele)</span></span></div>
+                <div class="store-row"><a href="https://www.cykelkraft.se/pannlampa-lumonite-leader" target="_blank" rel="noopener noreferrer" class="store-link" title="Cykelkraft">Cykelkraft<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">5 899 kr</span></div>
+                <div class="store-row"><a href="https://wolffwear.se/sv/lopning/pannlampa-lumonite-leader-6500-lm-2023.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Wolffwear">Wolffwear<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">6 999 kr</span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">5 899 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">6 838 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">2 h 00 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">99 Wh</div>
+              <span class="metric-sub">14,4V · 6,9Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">480 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">234 g</div>
+              <span class="metric-sub">lampa 155 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Batterisele: Valostore erbjuder paket med Slimvest V2 sele för 6 199 kr.</li>
+                <li>Konstruktion: Robust finsk design i helgjuten aluminium, IPX6, mycket tålig.</li>
+                <li>Huvudvikt: 234 g totalt (155 g lamphus + 79 g Ergo V2 pannband).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="10000" data-price="3990" data-runtime="90" data-capacity="96" data-weight="525" data-headweight="302" data-year="2022" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.olspecialisten.com/sv/pannlampor/led-pannlampor/silva-spectra-o.html" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.lampspecialisten.se/6324-large_default/silva-spectra-o.jpg" alt="SILVA SPECTRA O" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">SILVA SPECTRA O</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2022</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.olspecialisten.com/sv/pannlampor/led-pannlampor/silva-spectra-o.html" target="_blank" rel="noopener noreferrer" class="store-link" title="OL-Specialisten">OL-Specialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">3 990 kr <span class="store-note">(Rea)</span></span></div>
+                <div class="store-row"><a href="https://www.valostore.se/sv/produkt/pannlampa_silva__spectra_o" target="_blank" rel="noopener noreferrer" class="store-link" title="Valostore">Valostore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">4 699 kr <span class="store-note">(Kampanj)</span></span></div>
+                <div class="store-row"><a href="https://www.widforss.se/p/silva-spectra-o-10-000-lm" target="_blank" rel="noopener noreferrer" class="store-link" title="Widforss">Widforss<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 495 kr</span></div>
+                <div class="store-row"><a href="https://www.lampspecialisten.se/marknadens-baesta-lampor/1224silva-spectra-o.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Lampspecialisten">Lampspecialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">6 499 kr</span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">3 990 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">10 000 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">1 h 30 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">96 Wh</div>
+              <span class="metric-sub">14,4V · 6,7Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">525 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">302 g</div>
+              <span class="metric-sub">lampa 238 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Ljus: Marknadens kraftfullaste flöde (10 000 lm) med 8 st Cree LED.</li>
+                <li>Batterisele: Spectra Battery Harness ryggsele ingår i O-versionen.</li>
+                <li>Fjärrkontroll för handled ingår för enkel styrning i hög fart.</li>
+                <li>Huvudvikt: 302 g (238 g lamphus + 64 g Spectra O pannband/fäste).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="6200" data-price="4996" data-runtime="120" data-capacity="148" data-weight="740" data-headweight="247" data-year="2024" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.hylte-lantman.com/m-tiger-superion-iii-head-lamp-kit-6200-lumen" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.lampspecialisten.se/5883-large_default/m-tiger-sports-superion-ii-6200-lumen.jpg" alt="M Tiger Sports SUPERION-III" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">M Tiger Sports SUPERION-III</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2024</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.hylte-lantman.com/m-tiger-superion-iii-head-lamp-kit-6200-lumen" target="_blank" rel="noopener noreferrer" class="store-link" title="Hylte Jakt">Hylte Jakt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">4 996 kr <span class="store-note">(Lägsta pris)</span></span></div>
+                <div class="store-row"><a href="https://www.lampspecialisten.se/pannlampor/926-m-tiger-sports-superion-6200-lumen.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Lampspecialisten">Lampspecialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 530 kr <span class="store-note">(Superion II rea)</span></span></div>
+                <div class="store-row"><a href="https://www.olspecialisten.com/sv/pannlampor/led-pannlampor/m-tiger-sports-superion.html" target="_blank" rel="noopener noreferrer" class="store-link" title="OL-Specialisten">OL-Specialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 895 kr</span></div>
+                <div class="store-row"><a href="https://astrosweden.se/products/superion-3-head-lamp-kit-6200-lumen" target="_blank" rel="noopener noreferrer" class="store-link" title="Astro Sweden">Astro Sweden<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 995 kr</span></div>
+                <div class="store-row"><a href="https://mtigersports.se/products/superion-iii" target="_blank" rel="noopener noreferrer" class="store-link" title="M Tiger officiell">M Tiger officiell<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 995 kr <span class="store-note">(Listpris)</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">4 996 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">6 200 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">2 h 00 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">148 Wh</div>
+              <span class="metric-sub">14,8V · 10,0Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">740 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">247 g</div>
+              <span class="metric-sub">lampa 135 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Nyhet: Generation III med uppgraderat 148 Wh batteri (Samsung 21700 m USB-C).</li>
+                <li>Drifttid: Hela 2 h på maximala 6 200 lm (tidigare II gav 1,5 h m 103 Wh).</li>
+                <li>Batterisele säljs separat (M Tiger BR 501 ca 200–250 kr); batteri bärs i väst/sele.</li>
+                <li>Huvudvikt: 247 g totalt (135 g lamphus + 112 g PRO-ställning; 306 g inkl styrenhet).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="4500" data-price="4799" data-runtime="130" data-capacity="106" data-weight="595" data-headweight="192" data-year="2023" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.hylte-lantman.com/ledx-mamba-x-pand-kit-g4-kit-106-pannlampa" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.lampspecialisten.se/6203-large_default/mamba-x-pand-g4-kit-106-wh.jpg" alt="LEDX Mamba X-pand G4 Kit" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">LEDX Mamba X-pand G4 Kit</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2023</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.hylte-lantman.com/ledx-mamba-x-pand-kit-g4-kit-106-pannlampa" target="_blank" rel="noopener noreferrer" class="store-link" title="Hylte Jakt">Hylte Jakt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">4 799 kr <span class="store-note">(Kampanj (Lägsta pris))</span></span></div>
+                <div class="store-row"><a href="https://www.bearplayshop.se/optik-ljus-avstand/belysning/ledx-lights-mamba-x-pand-g4-kit-106-wh.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Bearplay Shop">Bearplay Shop<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 995 kr</span></div>
+                <div class="store-row"><a href="https://ledx.se" target="_blank" rel="noopener noreferrer" class="store-link" title="LEDX.se">LEDX.se<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 995 kr <span class="store-note">(Listpris)</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">4 799 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">4 500 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">2 h 10 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">106 Wh</div>
+              <span class="metric-sub">10,8V · 9,8Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">595 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">192 g</div>
+              <span class="metric-sub">lampa 125 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Vikt: Endast 125 g lamphus på huvudet (192 g inkl Headgear Pro LX).</li>
+                <li>Bärsystem: LEDX PowerPouch medföljer i standardkit för rygg-/bältesbärning.</li>
+                <li>Ljus: 4 500 lm (boost 5 000 lm) med bred och naturlig ljusspridning.</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="4195" data-price="4199" data-runtime="180" data-capacity="75" data-weight="472" data-headweight="204" data-year="2019" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.valostore.se/sv/produkt/lumonite_navigator" target="_blank" rel="noopener noreferrer">
+                <img src="https://cdn.handshake.fi/i/products/KIT_Headlamp_LUMONITE_Navigator_v2_4195_lm/thumbs/navigator_normal.jpg" alt="Lumonite Navigator (v.2)" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">Lumonite Navigator (v.2)</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2019</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.valostore.se/sv/produkt/lumonite_navigator" target="_blank" rel="noopener noreferrer" class="store-link" title="Valostore">Valostore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">4 199 kr <span class="store-note">(Kampanj (ord. 4 999 kr))</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">4 199 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">4 195 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">3 h 00 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">75 Wh</div>
+              <span class="metric-sub">14,4V · 5,2Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">472 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">204 g</div>
+              <span class="metric-sub">lampa 125 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Drifttid: Hela 3 timmar på maximala 4 195 lm – klassens bästa uthållighet!</li>
+                <li>Batterisele: Valostores paket inkluderar Slimvest V2 sele.</li>
+                <li>Huvudvikt: 204 g totalt (125 g lamphus + 79 g Ergo V2 pannband).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="3800" data-price="3296" data-runtime="130" data-capacity="111" data-weight="540" data-headweight="229" data-year="2024" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.hylte-lantman.com/m-tiger-hyperion-iii-head-lamp-kit-3800-lumen" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.lampspecialisten.se/6783-large_default/m-tiger-hyperion.jpg" alt="M Tiger Sports Hyperion-III" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">M Tiger Sports Hyperion-III</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2024</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.hylte-lantman.com/m-tiger-hyperion-iii-head-lamp-kit-3800-lumen" target="_blank" rel="noopener noreferrer" class="store-link" title="Hylte Jakt">Hylte Jakt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">3 296 kr <span class="store-note">(Lägsta pris)</span></span></div>
+                <div class="store-row"><a href="https://astrosweden.se/products/hyperion-3-head-lamp-kit-3800-lumen" target="_blank" rel="noopener noreferrer" class="store-link" title="Astro Sweden">Astro Sweden<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">3 995 kr</span></div>
+                <div class="store-row"><a href="https://www.olspecialisten.com/sv/pannlampor/led-pannlampor/m-tiger-sports-hyperion-iii.html" target="_blank" rel="noopener noreferrer" class="store-link" title="OL-Specialisten">OL-Specialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">3 995 kr <span class="store-note">(4 195 kr m sele)</span></span></div>
+                <div class="store-row"><a href="https://mtigersports.se/products/hyperion-iii" target="_blank" rel="noopener noreferrer" class="store-link" title="M Tiger officiell">M Tiger officiell<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">3 995 kr <span class="store-note">(Listpris)</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">3 296 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">3 800 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">2 h 10 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">111 Wh</div>
+              <span class="metric-sub">7,4V · 15,0Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">540 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">229 g</div>
+              <span class="metric-sub">lampa 117 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Batteri: Nytt stort 111 Wh batteripaket med Samsung 21700-celler & USB-C.</li>
+                <li>Mycket prisvärd lampa med 3 800 lm och 2 h 10 min drifttid på max.</li>
+                <li>Huvudvikt: 229 g (117 g lamphus + 112 g PRO-ställning; 286 g inkl styrkabel).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="3000" data-price="2495" data-runtime="75" data-capacity="36" data-weight="202" data-headweight="211" data-year="2023" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.hylte-lantman.com/silva-free-3000-m-pannlampa" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.lampspecialisten.se/6311-large_default/silve-free-3000-pannlampa.jpg" alt="Silva Free 3000 M" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">Silva Free 3000 M</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2023</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.hylte-lantman.com/silva-free-3000-m-pannlampa" target="_blank" rel="noopener noreferrer" class="store-link" title="Hylte Jakt">Hylte Jakt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">2 495 kr <span class="store-note">(Lägsta pris)</span></span></div>
+                <div class="store-row"><a href="https://www.cykelkraft.se/pannlampa-silva-free-3000-m" target="_blank" rel="noopener noreferrer" class="store-link" title="Cykelkraft">Cykelkraft<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">2 599 kr</span></div>
+                <div class="store-row"><a href="https://silvasweden.com/products/free-3000-s" target="_blank" rel="noopener noreferrer" class="store-link" title="Silva Sweden">Silva Sweden<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">2 999 kr <span class="store-note">(Free 3000 S listpris)</span></span></div>
+                <div class="store-row"><a href="https://www.lampspecialisten.se/lopning/1221silve-free-3000-pannlampa.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Lampspecialisten">Lampspecialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">3 499 kr</span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">2 495 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">3 000 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">1 h 15 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">36 Wh</div>
+              <span class="metric-sub">7,2V · 5,0Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">202 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">211 g</div>
+              <span class="metric-sub">lampa 144 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Modulärt system: Free-teknik utan sladdar integrerad direkt i pannbandet.</li>
+                <li>130 cm förlängningskabel ingår för att bära lättviktsbatteriet (202 g) i ficka/väst.</li>
+                <li>Drifttid 1 h 15 min vid maxfart (upp till 2 h vid god fartvind/kylning).</li>
+                <li>Huvudvikt: 211 g totalt (144 g lamphus + 67 g Free pannband).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="3000" data-price="2499" data-runtime="140" data-capacity="74" data-weight="392" data-headweight="212" data-year="2024" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.hylte-lantman.com/m-tiger-theia-iii-head-lamp-kit-3000-lumen" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.lampspecialisten.se/6768-large_default/m-tiger-theia.jpg" alt="M Tiger Sports Theia-III" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">M Tiger Sports Theia-III</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2024</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.hylte-lantman.com/m-tiger-theia-iii-head-lamp-kit-3000-lumen" target="_blank" rel="noopener noreferrer" class="store-link" title="Hylte Jakt">Hylte Jakt<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">2 499 kr <span class="store-note">(Lägsta pris)</span></span></div>
+                <div class="store-row"><a href="https://astrosweden.se/products/theia-3-head-lamp-kit-3000-lumen" target="_blank" rel="noopener noreferrer" class="store-link" title="Astro Sweden">Astro Sweden<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">2 995 kr</span></div>
+                <div class="store-row"><a href="https://www.olspecialisten.com/sv/pannlampor/led-pannlampor/m-tiger-sports-theia-iii.html" target="_blank" rel="noopener noreferrer" class="store-link" title="OL-Specialisten">OL-Specialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">2 995 kr</span></div>
+                <div class="store-row"><a href="https://mtigersports.se/products/theia-iii" target="_blank" rel="noopener noreferrer" class="store-link" title="M Tiger officiell">M Tiger officiell<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">2 995 kr <span class="store-note">(Listpris)</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">2 499 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">3 000 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">2 h 20 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">74 Wh</div>
+              <span class="metric-sub">7,4V · 10,0Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">392 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">212 g</div>
+              <span class="metric-sub">lampa 100 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Mycket prisvärd 3 000 lm lampa med hela 2 h 20 min drifttid på 100%.</li>
+                <li>Batteri: 74 Wh med Samsung 21700-celler och USB-C laddning/powerbank.</li>
+                <li>Huvudvikt: 212 g totalt (100 g lamphus + 112 g PRO-ställning; 269 g m styrkabel).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="2000" data-price="2899" data-runtime="90" data-capacity="36" data-weight="200" data-headweight="125" data-year="2022" class="">
+            <td class="col-image">
+              <a href="https://www.bearplayshop.se/optik-ljus-avstand/belysning/ledx-lights-snok-2000-x-pand-kit.html" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.lampspecialisten.se/6489-large_default/ledx-snok-2000-x-pand-kit-OL.jpg" alt="LEDX Snok 2000 Kit OL" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">LEDX Snok 2000 Kit OL</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2022</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.bearplayshop.se/optik-ljus-avstand/belysning/ledx-lights-snok-2000-x-pand-kit.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Bearplay Shop">Bearplay Shop<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">2 899 kr <span class="store-note">(Standardkit)</span></span></div>
+                <div class="store-row"><a href="https://www.lampspecialisten.se/pannlampor/1276ledx-snok-2000-x-pand-kit-OL.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Lampspecialisten">Lampspecialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">3 495 kr <span class="store-note">(Kit OL)</span></span></div>
+                <div class="store-row"><a href="https://ledx.se" target="_blank" rel="noopener noreferrer" class="store-link" title="LEDX.se">LEDX.se<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">3 495 kr <span class="store-note">(Listpris)</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">2 899 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">2 000 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">1 h 30 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">36 Wh</div>
+              <span class="metric-sub">7,2V · 5,0Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">200 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">125 g</div>
+              <span class="metric-sub">lampa 71 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Extremt lätt: Endast 71 g lamphus, 125 g totalt på huvudet med extern kabel.</li>
+                <li>Kit OL innehåller 100 cm förlängningskabel för att bära batteriet på kroppen/sele.</li>
+                <li>Drifttid 1 h 30 min på 100% plus automatisk reservljussäkring.</li>
+                <li>Obs: Understiger 3 000 lm kravet.</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="5400" data-price="6399" data-runtime="60" data-capacity="50" data-weight="240" data-headweight="215" data-year="2018" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.valostore.se/sv/produkt/pannlampa_lupine_betty_rx7" target="_blank" rel="noopener noreferrer">
+                <img src="https://cdn.handshake.fi/images/taskulamput/tuotekuvat/Lupine/Uudet/thumbs/betty_rx7_5000lm_1_normal.jpg" alt="Lupine Betty RX 7 (Bluetooth)" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">Lupine Betty RX 7 (Bluetooth)</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2018</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.valostore.se/sv/produkt/pannlampa_lupine_betty_rx7" target="_blank" rel="noopener noreferrer" class="store-link" title="Valostore">Valostore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">6 399 kr <span class="store-note">(Rea (ord. 9 399 kr))</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">6 399 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">5 400 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">1 h 00 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">50 Wh</div>
+              <span class="metric-sub">7,2V · 6,9Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">240 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">215 g</div>
+              <span class="metric-sub">lampa 150 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Drifttid: 1 h på maximala 5 400 lm (2 h på 3 400 lm).</li>
+                <li>Batteri: 50 Wh SmartCore med LED-kapacitetsvisning (240 g). 120 cm kabel ingår.</li>
+                <li>Styrning: Trådlös Bluetooth-fjärrkontroll och mobil-app.</li>
+                <li>CNC-fräst flygplansaluminium i tysk toppfinish (IP68).</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="5000" data-price="5495" data-runtime="110" data-capacity="80" data-weight="400" data-headweight="218" data-year="2015" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.bearplayshop.se/optik-ljus-avstand/belysning/pannlampa-mareld-vega-5000-re-jakt-med-vridbart-faste.html" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.signsport.se/5884-large_default/mila-vega-5000.jpg" alt="Mila Vega 5000 (Mareld)" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">Mila Vega 5000 (Mareld)</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2015</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.bearplayshop.se/optik-ljus-avstand/belysning/pannlampa-mareld-vega-5000-re-jakt-med-vridbart-faste.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Bearplay Shop">Bearplay Shop<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">5 495 kr <span class="store-note">(Mareld Vega RE)</span></span></div>
+                <div class="store-row"><a href="https://www.signsport.se/pannlampor/1007-mila-vega-5000.html" target="_blank" rel="noopener noreferrer" class="store-link" title="SignSport">SignSport<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 895 kr <span class="store-note">(6 300 kr m sele)</span></span></div>
+                <div class="store-row"><a href="https://www.lampspecialisten.se/pannlampor/1216mareld-vega-5000-re.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Lampspecialisten">Lampspecialisten<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 999 kr <span class="store-note">(Mareld Vega RE)</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">5 495 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">5 000 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">1 h 50 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">80 Wh</div>
+              <span class="metric-sub">14,8V · 5,5Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">400 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">218 g</div>
+              <span class="metric-sub">lampa ~150 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Lanseringsår: Grundtekniken och optiken lanserades 2015 (Vega); uppgraderad till 5 000 lm och GoPro-fäste 2019.</li>
+                <li>Kartläsning: Varmvit ljusfärg (5000K, hög färgåtergivning) för bländfri kartläsning.</li>
+                <li>Batterisele ingår i orienteringspaketet för 6 300 kr hos SignSport.</li>
+                <li>Heter Mila eller Mareld Vega 5000 RE; svensk orienteringsklassiker.</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="4000" data-price="5189" data-runtime="90" data-capacity="71" data-weight="345" data-headweight="177" data-year="2020" class="highlight-orientering">
+            <td class="col-image">
+              <a href="https://www.cykelkraft.se/pannlampa-moonlight-bright-as-day-4000-black" target="_blank" rel="noopener noreferrer">
+                <img src="https://moonlightmountaingear.com/cdn/shop/files/BAD4000_headlamp_3quarter-front.jpg" alt="Moonlight Mountain Gear Bright As Day 4000" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">Moonlight Mountain Gear Bright As Day 4000</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2020</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.cykelkraft.se/pannlampa-moonlight-bright-as-day-4000-black" target="_blank" rel="noopener noreferrer" class="store-link" title="Cykelkraft">Cykelkraft<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">5 189 kr</span></div>
+                <div class="store-row"><a href="https://moonlightmountaingear.com/products/bright-as-day-4000-headlamp" target="_blank" rel="noopener noreferrer" class="store-link" title="Moonlight">Moonlight<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">5 499 kr <span class="store-note">(Listpris)</span></span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">5 189 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">4 000 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">1 h 30 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">71 Wh</div>
+              <span class="metric-sub">14,8V · 4,8Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">345 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">177 g</div>
+              <span class="metric-sub">lampa 127 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Låg huvudvikt: Endast 177 g totalt (127 g lamphus + 50 g fäste) för hela 4 000 lm.</li>
+                <li>Batteri: 71 Wh (345 g) bärs i väst/sele/ficka med medföljande 100 cm kabel.</li>
+                <li>GoPro-snabbfäste och aktiv termisk reglering med konstant ljusstyrka.</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr data-lumen="2489" data-price="2999" data-runtime="150" data-capacity="50" data-weight="257" data-headweight="156" data-year="2019" class="">
+            <td class="col-image">
+              <a href="https://www.valostore.se/sv/produkt/lumonite_air" target="_blank" rel="noopener noreferrer">
+                <img src="https://cdn.handshake.fi/i/products/KIT_Headlamp_LUMONITE_Air_v2_2489_lm/thumbs/air_normal.jpg" alt="Lumonite Air (v.2)" class="product-thumb" loading="lazy">
+              </a>
+            </td>
+            <td class="col-model">
+              <div class="product-name">Lumonite Air (v.2)</div>
+            </td>
+            <td class="col-num col-year">
+              <div class="metric-value">2019</div>
+            </td>
+            <td class="col-stores">
+              <div class="store-list">
+                <div class="store-row"><a href="https://www.valostore.se/sv/produkt/lumonite_air" target="_blank" rel="noopener noreferrer" class="store-link" title="Valostore">Valostore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price is-lowest">2 999 kr <span class="store-note">(3 199 kr m sele)</span></span></div>
+                <div class="store-row"><a href="https://wolffwear.se/sv/lopning/pannlampa-lumonite-air2-2000-lm.html" target="_blank" rel="noopener noreferrer" class="store-link" title="Wolffwear">Wolffwear<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></a><span class="store-price">3 295 kr</span></div>
+              </div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value price-highlight">2 999 kr</div>
+              <span class="metric-sub">Lägsta pris</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">2 489 lm</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">2 h 30 min</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">50 Wh</div>
+              <span class="metric-sub">14,4V · 3,45Ah</span>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">257 g</div>
+            </td>
+            <td class="col-num">
+              <div class="metric-value">156 g</div>
+              <span class="metric-sub">lampa 77 g</span>
+            </td>
+            <td class="comments-cell">
+              <ul>
+                <li>Fjäderlätt: Endast 77 g lamphus (156 g totalt på huvudet med Ergo V2).</li>
+                <li>Batterisele: Valostore har paket med Slimvest V2 sele för 3 199 kr.</li>
+                <li>Drifttid: Hela 2 h 30 min på full effekt (2 489 lm).</li>
+                <li>Obs: Understiger 3 000 lm kravet.</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      Orienteringspannlampor Sammanställning • Priser och specifikationer verifierade 2026-09
+    </footer>
+  </div>
+
+  <script>
+    // State
+    let sortColumn = "lumen";
+    let sortDirection = "desc";
+
+    const tableBody = document.getElementById("tableBody");
+    const rows = Array.from(tableBody.querySelectorAll("tr"));
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    const printBtn = document.getElementById("printBtn");
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem("headlamp_theme");
+      if (savedTheme) {
+        document.documentElement.setAttribute("data-theme", savedTheme);
+        updateThemeBtn(savedTheme);
+      } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+        document.documentElement.setAttribute("data-theme", "light");
+        updateThemeBtn("light");
+      }
+    }
+
+    function updateThemeBtn(theme) {
+      if (theme === "light") {
+        themeIcon.textContent = "🌙";
+        themeToggle.innerHTML = '<span id="themeIcon">🌙</span> Mörkt läge';
+      } else {
+        themeIcon.textContent = "☀️";
+        themeToggle.innerHTML = '<span id="themeIcon">☀️</span> Ljust läge';
+      }
+    }
+
+    themeToggle.addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme") || "dark";
+      const next = current === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("headlamp_theme", next);
+      updateThemeBtn(next);
+    });
+
+    printBtn.addEventListener("click", () => {
+      window.print();
+    });
+
+    function sortRows() {
+      rows.sort((a, b) => {
+        let valA, valB;
+        if (sortColumn === "model") {
+          valA = a.querySelector(".product-name").innerText.toLowerCase();
+          valB = b.querySelector(".product-name").innerText.toLowerCase();
+          return sortDirection === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        } else if (sortColumn === "year") {
+          valA = parseInt(a.dataset.year || "0", 10);
+          valB = parseInt(b.dataset.year || "0", 10);
+        } else if (sortColumn === "price") {
+          valA = parseInt(a.dataset.price || "0", 10);
+          valB = parseInt(b.dataset.price || "0", 10);
+        } else if (sortColumn === "lumen") {
+          valA = parseInt(a.dataset.lumen || "0", 10);
+          valB = parseInt(b.dataset.lumen || "0", 10);
+        } else if (sortColumn === "runtime") {
+          valA = parseInt(a.dataset.runtime || "0", 10);
+          valB = parseInt(b.dataset.runtime || "0", 10);
+        } else if (sortColumn === "capacity") {
+          valA = parseInt(a.dataset.capacity || "0", 10);
+          valB = parseInt(b.dataset.capacity || "0", 10);
+        } else if (sortColumn === "weight") {
+          valA = parseInt(a.dataset.weight || "0", 10);
+          valB = parseInt(b.dataset.weight || "0", 10);
+        } else if (sortColumn === "headweight") {
+          valA = parseInt(a.dataset.headweight || "0", 10);
+          valB = parseInt(b.dataset.headweight || "0", 10);
+        }
+
+        return sortDirection === "asc" ? (valA - valB) : (valB - valA);
+      });
+
+      rows.forEach(row => tableBody.appendChild(row));
+    }
+
+    document.querySelectorAll("th[data-sort]").forEach(th => {
+      th.addEventListener("click", () => {
+        const col = th.dataset.sort;
+        if (sortColumn === col) {
+          sortDirection = sortDirection === "asc" ? "desc" : "asc";
+        } else {
+          sortColumn = col;
+          sortDirection = (col === "price" || col === "weight" || col === "headweight") ? "asc" : "desc";
+        }
+
+        document.querySelectorAll("th[data-sort]").forEach(t => {
+          t.classList.remove("sorted-asc", "sorted-desc");
+        });
+
+        th.classList.add(sortDirection === "asc" ? "sorted-asc" : "sorted-desc");
+        sortRows();
+      });
+    });
+
+    const initialSortTh = document.querySelector('th[data-sort="lumen"]');
+    if (initialSortTh) {
+      initialSortTh.classList.add("sorted-desc");
+    }
+
+    initTheme();
+    sortRows();
+  </script>
+</body>
+</html>
